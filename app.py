@@ -14,12 +14,12 @@ app.debug = True
 app.secret_key = 'secret'
 
 socketio = SocketIO(app)
-singleview = singleview(app)
+singleview = singleview(app, socketio)
 
 # routes
 #######################################################
 
-@app.route('/', no_preload=True, no_ajax_socket_load=True, methods=['GET'])
+@app.route('/', no_preload=True, no_ajax_socket_load=True)
 def index():
 	template_vars = {}
 	return render_template('index.html', **template_vars)
