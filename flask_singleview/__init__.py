@@ -32,11 +32,13 @@ class singleview:
 		# compiles it into a glorious regex
 		return re.compile("^{}$".format(route_regex))
 
-	def route(self, rule, no_preload=False, no_ajax_socket_load=False, **options):
+	def route(self, rule, no_preload=False, no_ajax_socket_load=False, route_exclude=False, **options):
 		def decorator(f):
 			@wraps(f)
 			def decorated_function(ajax_socket_call=False, *args, **kwargs):
-				if ajax_socket_call == False:
+				if route_exclude:
+					return f(*args, **kwargs)
+				elif ajax_socket_call == False:
 					if no_preload:
 						return render_template('index.html')
 					else:
@@ -49,11 +51,6 @@ class singleview:
 
 			self.routes.append((self.build_route_pattern(rule), decorated_function))
 			# this is exactly how the `@app.route()` decorator does its thing
-			if self.method == 'ajax':
-				if type(options.get('methods')) != list:
-					options['methods'] = []
-				if 'GET' not in options['methods']:
-					options['methods'].append('GET')
 			self.app.add_url_rule(rule, decorated_function.__name__, decorated_function, **options)
 
 			return decorated_function
