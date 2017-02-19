@@ -14,6 +14,7 @@ app.debug = True
 app.secret_key = 'secret'
 
 socketio = SocketIO(app)
+
 singleview = singleview(app, socketio)
 
 # routes
@@ -21,11 +22,10 @@ singleview = singleview(app, socketio)
 
 @app.route('/', no_preload=True, no_ajax_socket_load=True)
 def index():
-	template_vars = {}
-	return render_template('index.html', **template_vars)
+	return render_template('index.html')
 
 @app.route('/<path:path>')
-def static_proxy(path):
+def static_files(path):
 	return app.send_static_file(path)
 
 #######################################################

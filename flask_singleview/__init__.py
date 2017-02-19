@@ -1,4 +1,4 @@
-from flask import render_template, jsonify, request
+from flask import render_template, jsonify, request, url_for
 from functools import wraps
 import re, base64
 
@@ -25,6 +25,20 @@ class singleview:
 		else:
 			raise TypeError('Unknown method was provided')
 
+		self.scripts = self.sascripts(self.method)
+
+	def sascripts(self, method):
+		jquery = '<script src="{}"></script>'.format('/static/jquery.min.js')
+		socketio = '<script src="{}"></script>'.format('/static/socketio.min.js')
+		singleview_socket = '<script src="{}"></script>'.format('/static/singleview_socket.js')
+		singleview_ajax = '<script src="{}"></script>'.format('/static/singleview_ajax.js')
+
+		if method == 'ajax':
+			return '{}{}'.format(jquery, singleview_ajax)
+		elif method == 'socketio':
+			return '{}{}{}'.format(jquery, socketio, singleview_socket)
+
+
 	def socket_call(self, data):
 		self.serve(data['page'])
 
@@ -43,9 +57,9 @@ class singleview:
 					return f(*args, **kwargs)
 				elif ajax_socket_call == False:
 					if no_preload:
-						return render_template('index.html')
+						return render_template('index.html', singleview_scripts=self.scripts)
 					else:
-						return render_template('index.html', preload_content=f(*args, **kwargs))
+						return render_template('index.html', preload_content=f(*args, **kwargs), singleview_scripts=self.scripts)
 				else:
 					if no_ajax_socket_load:
 						return ''

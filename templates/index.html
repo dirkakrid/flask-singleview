@@ -26,8 +26,8 @@
 			{% endif %}
 		</div>
 
-		<script src="{{url_for('static', filename='jquery.min.js')}}"></script>
-		<script src="{{url_for('static', filename='socketio.min.js')}}"></script>
-		<script src="{{url_for('static', filename='singleview.js')}}"></script>
+		{% autoescape false %}
+			{{ singleview_scripts }}
+		{% endautoescape %}
 	</body>
 </html>
