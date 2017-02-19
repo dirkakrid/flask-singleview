@@ -26,7 +26,7 @@ class singleview:
 					if no_preload:
 						return render_template('index.html')
 					else:
-						return render_template('index.html', socket_preload_content=f(*args, **kwargs))
+						return render_template('index.html', preload_content=f(*args, **kwargs))
 				else:
 					if no_socket_load:
 						return ''

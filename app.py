@@ -44,12 +44,12 @@ def route_1():
 
 @app.route('/2')
 def route_2():
-	values = {"data": "this is page 2<br><a href='##3'>page 3</a>"}
+	values = {"data": "this is page 2<br><a href='##3/pipskweak'>page 3</a>"}
 	return render_template('default.html', **values)
 
-@app.route('/3')
-def route_3():
-	values = {"data": "this is page 3<br><a href='##1'>page 1</a>"}
+@app.route('/3/<name>')
+def route_3(name=None):
+	values = {"data": "this is page 3<br><a href='##1'>page 1</a> {}".format(name)}
 	return render_template('default.html', **values)
 
 # errors
