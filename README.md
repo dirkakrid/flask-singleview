@@ -4,6 +4,7 @@ A flask micro extension for building *single-view* web apps.
 based on [flask-socketio](https://flask-socketio.readthedocs.io/en/latest/) or AJAX, your choice.
 
 [check out the docs](https://harryparkdotio.github.io/flask-singleview/)
+[check flask_singleview on pip](https://pypi.python.org/pypi?name=flask_singleview&version=0.1&:action=display)
 
 ## installation
 `pip install flask_singleview`
