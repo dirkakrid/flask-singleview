@@ -9,16 +9,21 @@ class singleview:
 		self.app = app
 		app.route = self.route
 
+		self.routes = []
+
 		if method == None:
 			self.method = 'ajax'
+			@app.route('/page', route_exclude=True, methods=['POST'])
+			def singleview_ajax_page():
+				if request.method == 'POST':
+					return self.serve(request.form['page'])
+
 		elif isinstance(method, method.__class__) == True:
 			self.socketio = method
 			self.method = 'socketio'
 			self.socketio.on_event('get page', getattr(self, 'socket_call'), namespace='/page')
 		else:
 			raise TypeError('Unknown method was provided')
-
-		self.routes = []
 
 	def socket_call(self, data):
 		self.serve(data['page'])
