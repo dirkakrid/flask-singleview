@@ -129,7 +129,7 @@ elif accessed_by == 'flask_route':
 ```
 
 this is how the index template is setup
-```html
+```
 <body>
 	<!-- links; not required -->
 	<ul>
