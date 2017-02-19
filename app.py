@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from flask import Flask, render_template, redirect, url_for, request, session, send_from_directory, jsonify
 from flask_socketio import SocketIO
-import requests, json, base64, random, time, sys
+import requests, json, base64, sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -37,9 +37,19 @@ def static_proxy(path):
 
 #######################################################
 
-@app.route('/branches')
-def route_branches():
-	values = {"data": Repository().branches()}
+@app.route('/1')
+def route_1():
+	values = {"data": "page 1"}
+	return render_template('default.html', **values)
+
+@app.route('/2')
+def route_2():
+	values = {"data": "page 2"}
+	return render_template('default.html', **values)
+
+@app.route('/3')
+def route_3():
+	values = {"data": "page 3"}
 	return render_template('default.html', **values)
 
 # errors
