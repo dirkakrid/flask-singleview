@@ -29,14 +29,13 @@ class singleview:
 
 	def sascripts(self, method):
 		jquery = '<script src="{}"></script>'.format('/static/jquery.min.js')
-		socketio = '<script src="{}"></script>'.format('/static/socketio.min.js')
-		singleview_socket = '<script src="{}"></script>'.format('/static/singleview_socket.js')
-		singleview_ajax = '<script src="{}"></script>'.format('/static/singleview_ajax.js')
+		singleview_socket = '<script src="{}"></script>'.format('/static/singleview_socketio.min.js')
+		singleview_ajax = '<script src="{}"></script>'.format('/static/singleview_ajax.min.js')
 
 		if method == 'ajax':
 			return '{}{}'.format(jquery, singleview_ajax)
 		elif method == 'socketio':
-			return '{}{}{}'.format(jquery, socketio, singleview_socket)
+			return '{}{}'.format(jquery, singleview_socket)
 
 
 	def socket_call(self, data):

@@ -23,7 +23,10 @@ function currentPath() {
 	return path;
 }
 
-function changePage(path, backforth=false) {
+function changePage(path, backforth) {
+	if (backforth === undefined || backforth === null) {
+		backforth = false;
+	}
 	if ((currentPath() === path && backforth === true) || currentPath() !== path) {
 		$('#singleview-content').hide();
 		$.post(window.location.protocol + "//" + window.location.host + '/page', {page: path}).done(function(data) {
