@@ -112,3 +112,33 @@ elif accessed_by == 'flask_route':
 	preload_content = render_template(template, values)
 	return render_template('index.html', preload_content=preload_content)
 ```
+
+## href-ing the shit out of your web app
+So, by now you must be wondering how to actually reference and link between pages.
+
+```html
+<!-- goes to index -->
+<a href="##">home</a>
+```
+
+*`url_for()` also works*
+```html
+<!-- goes to the url of route_1 -->
+<a href="##{{url_for('route_1')}}">1</a>
+<!-- note the two leading hashtags -->
+```
+
+Just reference all **internal** links with **`##`** before. This way, js can capture it.
+
+You can decide whether or not you want to omit the leading `/` from your `href` attributes, singleview_flask takes it into account either way.
+
+##### Examples
+
+- `##hello` &rarr; `example.com/hello`
+
+- `##/hello` &rarr; `example.com/hello`
+
+- `##hello/name` &rarr; `example.com/hello/name`
+
+#### Why lead with `##`?
+Good question, it's still fairly standard when it comes to a URL, meaning that it isn't going to chuck a tantrum if the js doesn't load properly, it may not work, but it won't scream at you.
