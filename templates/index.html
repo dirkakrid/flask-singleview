@@ -19,7 +19,7 @@
 		</ul>
 
 		<div id="singleview-content">
-			{% if preload_content %}
+			{% if preload_content is defined %}
 				{% autoescape false %}
 					{{ preload_content }}
 				{% endautoescape %}
