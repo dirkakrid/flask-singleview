@@ -128,6 +128,35 @@ elif accessed_by == 'flask_route':
 	return render_template('index.html', preload_content=preload_content)
 ```
 
+this is how the index template is setup
+```html
+<body>
+	<!-- links; not required -->
+	<ul>
+		<li><a href="##">home</a></li>
+		<li><a href="##1">1</a></li>
+		<li><a href="##2">2</a></li>
+		<li><a href="##3/pipskweak">3</a></li>
+	</ul>
+
+	<!-- content; leave it EXACTLY like this -->
+	<div id="singleview-content">
+		{% if preload_content is defined %}
+			{% autoescape false %}
+				{{ preload_content }}
+			{% endautoescape %}
+		{% endif %}
+	</div>
+
+	<!-- scripts; put this at the TOP of your scripts. -->
+	{% autoescape false %}
+		{{ singleview_scripts }}
+	{% endautoescape %}
+</body>
+```
+
+> note it doesn't matter how your custom views are rendering, it'll just pop it into the `div` with the id `singleview-content`
+
 ## href-ing the shit out of your web app
 So, by now you must be wondering how to actually reference and link between pages.
 
