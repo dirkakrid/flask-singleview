@@ -1,5 +1,5 @@
 var methods = ['socketio', 'ajax'];
-var method = methods[0];
+var method = methods[1];
 
 $(document).ready(function() {
 	load_link_triggers();
@@ -73,7 +73,7 @@ function emitPage(path) {
 }
 
 function postPage(path) {
-	$.get(window.location.protocol + "//" + window.location.host + '/page', {page: path}).done(function(data) {
+	$.post(window.location.protocol + "//" + window.location.host + '/page', {page: path}).done(function(data) {
 		$('#singleview-content').html(atob(data)).show();
 		$('a[href^="##"]').unbind('click');
 		load_link_triggers();

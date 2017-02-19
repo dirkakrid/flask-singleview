@@ -14,7 +14,7 @@ app.debug = True
 app.secret_key = 'secret'
 
 socketio = SocketIO(app)
-singleview = singleview(app, socketio)
+singleview = singleview(app)
 
 # socketio
 #######################################################
@@ -23,9 +23,11 @@ singleview = singleview(app, socketio)
 def socket_page(data):
 	singleview.serve(data['page'])
 
-@app.route('/page', route_exclude=True, methods=['GET'])
+@app.route('/page', route_exclude=True, methods=['POST'])
 def singleview_ajax_page():
-	return singleview.serve(request.args.get('page'))
+	print request.referrer
+	if request.method == 'POST':
+		return singleview.serve(request.form['page'])
 
 # routes
 #######################################################

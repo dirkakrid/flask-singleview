@@ -1,4 +1,4 @@
-from flask import render_template, jsonify
+from flask import render_template, jsonify, request
 from functools import wraps
 import re, base64
 
@@ -15,7 +15,7 @@ class singleview:
 			self.socketio = method
 			self.method = 'socketio'
 		else:
-			raise TypeError('No valid method was provided')
+			raise TypeError('Unknown method was provided')
 
 		self.routes = []
 
