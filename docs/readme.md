@@ -130,6 +130,7 @@ elif accessed_by == 'flask_route':
 
 this is how the index template is setup
 ```
+{% raw %}
 <body>
 	<!-- links; not required -->
 	<ul>
@@ -153,6 +154,7 @@ this is how the index template is setup
 		{{ singleview_scripts }}
 	{% endautoescape %}
 </body>
+{% endraw %}
 ```
 
 > note it doesn't matter how your custom views are rendering, it'll just pop it into the `div` with the id `singleview-content`
