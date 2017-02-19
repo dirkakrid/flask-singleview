@@ -1,15 +1,29 @@
-from flask import render_template
+from flask import render_template, jsonify
 from functools import wraps
 import re, base64
 
 # https://ains.co/blog/things-which-arent-magic-flask-part-1.html
 # https://ains.co/blog/things-which-arent-magic-flask-part-2.html
 class singleview:
-	def __init__(self, app, socketio):
+	def __init__(self, app, method='ajax', socketio=None):
 		self.app = app
-		self.socketio = socketio
 		app.route = self.route
+
+		method = method.lower()
+		if method == 'ajax':
+			self.method = 'ajax'
+		elif method == 'socket' or method == 'socketio':
+			if socketio != None and isinstance(socketio, socketio.__class__) == True:
+				self.socketio = socketio
+				self.method = 'socketio'
+			else:
+				raise NameError('could not find `socketio`')
+		else:
+			raise TypeError('No valid method was provided')
+
 		self.routes = []
+
+
 
 	@staticmethod
 	def build_route_pattern(route):
@@ -18,22 +32,28 @@ class singleview:
 		# compiles it into a glorious regex
 		return re.compile("^{}$".format(route_regex))
 
-	def route(self, rule, no_preload=False, no_socket_load=False, **options):
+	def route(self, rule, no_preload=False, no_ajax_socket_load=False, **options):
 		def decorator(f):
 			@wraps(f)
-			def decorated_function(socket_call=False, *args, **kwargs):
-				if socket_call == False:
+			def decorated_function(ajax_socket_call=False, *args, **kwargs):
+				if ajax_socket_call == False:
 					if no_preload:
 						return render_template('index.html')
 					else:
 						return render_template('index.html', preload_content=f(*args, **kwargs))
 				else:
-					if no_socket_load:
+					if no_ajax_socket_load:
 						return ''
 					else:
 						return f(*args, **kwargs)
+
 			self.routes.append((self.build_route_pattern(rule), decorated_function))
 			# this is exactly how the `@app.route()` decorator does its thing
+			if self.method == 'ajax':
+				if type(options.get('methods')) != list:
+					options['methods'] = []
+				if 'GET' not in options['methods']:
+					options['methods'].append('GET')
 			self.app.add_url_rule(rule, decorated_function.__name__, decorated_function, **options)
 
 			return decorated_function
@@ -54,7 +74,10 @@ class singleview:
 		route_match = self.get_route_match(path)
 		if route_match:
 			kwargs, view_function = route_match
-			# socketio emits the page
-			self.socketio.emit('page', base64.b64encode(view_function(socket_call=True, **kwargs)), namespace='/page')
+			if self.method == 'socketio':
+				# socketio emits the page
+				self.socketio.emit('page', base64.b64encode(view_function(ajax_socket_call=True, **kwargs)), namespace='/page')
+			elif self.method == 'ajax':
+				return base64.b64encode(view_function(ajax_socket_call=True, **kwargs))
 		else:
 			return 404

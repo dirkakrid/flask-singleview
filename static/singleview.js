@@ -1,3 +1,10 @@
+var methods = ['socketio', 'ajax'];
+var method = methods[1];
+
+$(document).ready(function() {
+	load_link_triggers();
+});
+
 function load_link_triggers() {
 	$('a[href^="##"]').each(function() {
 		$(this).on('click', function(e) {
@@ -11,26 +18,22 @@ function load_link_triggers() {
 	});
 }
 
-$(document).ready(function() {
-	load_link_triggers();
-});
+if (method === 'socketio') {
+	new_socket = function(namespace='') {
+		namespace = '/' + namespace.substr(namespace.indexOf('/') + 1);
+		return io.connect('http://' + document.domain + ':' + location.port + namespace, {'force new connection': true});
+	}
 
-new_socket = function(namespace='') {
-	namespace = '/' + namespace.substr(namespace.indexOf('/') + 1);
-	return io.connect('http://' + document.domain + ':' + location.port + namespace, {'force new connection': true});
+	var sockets = {
+		page: new_socket('page')
+	};
+
+	sockets.page.on('page', function(data) {
+		$('#singleview-content').html(atob(data)).show();
+		$('a[href^="##"]').unbind('click');
+		load_link_triggers();
+	});
 }
-
-var current_login_status = false;
-
-var sockets = {
-	page: new_socket('page')
-};
-
-sockets.page.on('page', function(data) {
-	$('#singleview-content').html(atob(data)).show();
-	$('a[href^="##"]').unbind('click');
-	load_link_triggers();
-});
 
 function currentPath() {
 	var path = window.location.pathname;
@@ -43,7 +46,11 @@ function currentPath() {
 function changePage(path, backforth=false) {
 	if ((currentPath() === path && backforth === true) || currentPath() !== path) {
 		$('#singleview-content').hide();
-		sockets.page.emit('get page', {"page": path});
+		if (method === 'socketio') {
+			emitPage(path);
+		} else if (method === 'ajax') {
+			postPage(path);
+		}
 	}
 	if (backforth === false) {
 		var current_url = window.location.protocol + "//" + window.location.host + '/' + path;
@@ -59,4 +66,17 @@ window.onpopstate = function(event) {
 	} else {
 		changePage('', true);
 	}
+}
+
+function emitPage(path) {
+	sockets.page.emit('get page', {"page": path});
+}
+
+function postPage(path) {
+	$.get(window.location.protocol + "//" + window.location.host + '/page', {page: path}).done(function(data) {
+		console.log(data);
+		$('#singleview-content').html(atob(data)).show();
+		$('a[href^="##"]').unbind('click');
+		load_link_triggers();
+	});
 }
