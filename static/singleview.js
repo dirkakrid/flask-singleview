@@ -1,5 +1,5 @@
 var methods = ['socketio', 'ajax'];
-var method = methods[1];
+var method = methods[0];
 
 $(document).ready(function() {
 	load_link_triggers();

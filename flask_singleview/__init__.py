@@ -5,19 +5,15 @@ import re, base64
 # https://ains.co/blog/things-which-arent-magic-flask-part-1.html
 # https://ains.co/blog/things-which-arent-magic-flask-part-2.html
 class singleview:
-	def __init__(self, app, method='ajax', socketio=None):
+	def __init__(self, app, method=None):
 		self.app = app
 		app.route = self.route
 
-		method = method.lower()
-		if method == 'ajax':
+		if method == None:
 			self.method = 'ajax'
-		elif method == 'socket' or method == 'socketio':
-			if socketio != None and isinstance(socketio, socketio.__class__) == True:
-				self.socketio = socketio
-				self.method = 'socketio'
-			else:
-				raise NameError('could not find `socketio`')
+		elif isinstance(method, method.__class__) == True:
+			self.socketio = method
+			self.method = 'socketio'
 		else:
 			raise TypeError('No valid method was provided')
 

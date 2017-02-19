@@ -14,7 +14,7 @@ app.debug = True
 app.secret_key = 'secret'
 
 socketio = SocketIO(app)
-singleview = singleview(app, 'ajax')
+singleview = singleview(app, socketio)
 
 # socketio
 #######################################################
