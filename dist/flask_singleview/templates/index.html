@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+		<meta http-equiv="x-ua-compatible" content="ie=edge">
+
+		<title>flask-singleview</title>
+		<meta name="description" content="">
+		<meta name="author" content="">
+	</head>
+
+	<body>
+		<ul>
+			<li><a href="##">home</a></li>
+			<li><a href="##1">1</a></li>
+			<li><a href="##2">2</a></li>
+			<li><a href="##3/pipskweak">3</a></li>
+		</ul>
+
+		<div id="singleview-content">
+			{% if preload_content is defined %}
+				{% autoescape false %}
+					{{ preload_content }}
+				{% endautoescape %}
+			{% endif %}
+		</div>
+
+		{% autoescape false %}
+			{{ singleview_scripts }}
+		{% endautoescape %}
+	</body>
+</html>
