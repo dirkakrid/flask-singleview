@@ -39,17 +39,17 @@ def static_proxy(path):
 
 @app.route('/1')
 def route_1():
-	values = {"data": "page 1"}
+	values = {"data": "this is page 1<br><a href='##2'>page 2</a>"}
 	return render_template('default.html', **values)
 
 @app.route('/2')
 def route_2():
-	values = {"data": "page 2"}
+	values = {"data": "this is page 2<br><a href='##3'>page 3</a>"}
 	return render_template('default.html', **values)
 
 @app.route('/3')
 def route_3():
-	values = {"data": "page 3"}
+	values = {"data": "this is page 3<br><a href='##1'>page 1</a>"}
 	return render_template('default.html', **values)
 
 # errors

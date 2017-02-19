@@ -19,9 +19,11 @@
 		</ul>
 
 		<div id="singleview-content">
-			{% autoescape false %}
-				{{ socket_preload_content }}
-			{% endautoescape %}
+			{% if preload_content %}
+				{% autoescape false %}
+					{{ preload_content }}
+				{% endautoescape %}
+			{% endif %}
 		</div>
 
 		<script src="{{url_for('static', filename='jquery.min.js')}}"></script>

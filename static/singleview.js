@@ -1,3 +1,20 @@
+function load_link_triggers() {
+	$('a[href^="##"]').each(function() {
+		$(this).on('click', function(e) {
+			e.preventDefault();
+			$page = $(this).attr('href').replace('##', '');
+			if ($page[0] === '/') {
+				$page = $page.substr(1);
+			}
+			changePage($page);
+		});
+	});
+}
+
+$(document).ready(function() {
+	load_link_triggers();
+});
+
 new_socket = function(namespace='') {
 	namespace = '/' + namespace.substr(namespace.indexOf('/') + 1);
 	return io.connect('http://' + document.domain + ':' + location.port + namespace, {'force new connection': true});
@@ -12,25 +29,7 @@ var sockets = {
 sockets.page.on('page', function(data) {
 	$('#singleview-content').html(atob(data)).show();
 	$('a[href^="##"]').unbind('click');
-	$('a[href^="##"]').unbind('click');
-	reload_socket_events();
-});
-
-function reload_socket_events() {
-	$('a[href^="##"]').each(function() {
-		$(this).on('click', function(e) {
-			e.preventDefault();
-			$page = $(this).attr('href').replace('##', '');
-			if ($page[0] === '/') {
-				$page = $page.substr(1);
-			}
-			changePage($page);
-		});
-	});
-}
-
-$(document).ready(function() {
-	reload_socket_events();
+	load_link_triggers();
 });
 
 function currentPath() {
