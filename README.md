@@ -5,6 +5,9 @@ based on [flask-socketio](https://flask-socketio.readthedocs.io/en/latest/) or A
 
 [check out the docs](https://harryparkdotio.github.io/flask-singleview/)
 
+## installation
+`pip install flask_singleview`
+
 ### initial setup
 ```python
 from flask import Flask, render_template, jsonify
