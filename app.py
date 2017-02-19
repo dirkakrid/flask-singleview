@@ -14,14 +14,10 @@ app.debug = True
 app.secret_key = 'secret'
 
 socketio = SocketIO(app)
-singleview = singleview(app)
+singleview = singleview(app, socketio)
 
 # socketio
 #######################################################
-
-@socketio.on('get page', namespace='/page')
-def socket_page(data):
-	singleview.serve(data['page'])
 
 @app.route('/page', route_exclude=True, methods=['POST'])
 def singleview_ajax_page():

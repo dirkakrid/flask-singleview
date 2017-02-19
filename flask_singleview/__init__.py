@@ -14,12 +14,14 @@ class singleview:
 		elif isinstance(method, method.__class__) == True:
 			self.socketio = method
 			self.method = 'socketio'
+			self.socketio.on_event('get page', getattr(self, 'socket_call'), namespace='/page')
 		else:
 			raise TypeError('Unknown method was provided')
 
 		self.routes = []
 
-
+	def socket_call(self, data):
+		self.serve(data['page'])
 
 	@staticmethod
 	def build_route_pattern(route):
