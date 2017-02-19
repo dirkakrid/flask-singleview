@@ -16,6 +16,7 @@ singleview = singleview(app, socketio)
 ## initial setup
 ```python
 from flask import Flask, render_template, jsonify
+# only necessary if you are using socketio
 from flask_socketio import SocketIO
 from flask_singleview import singleview
 import requests, json, base64
@@ -23,24 +24,36 @@ import requests, json, base64
 app = Flask(__name__)
 app.threaded = True
 
+# if you want to use socketio
 socketio = SocketIO(app)
 singleview = singleview(app, socketio)
 
-# socketio
-#######################################################
+# if you just want to use AJAX
+singleview = singleview(app)
 
-@socketio.on('get page', namespace='/page')
-def socket_page(data):
-	singleview.serve(data['page'])
-
-#######################################################
 
 # routes
+#######################################################
+
+@app.route('/', no_preload=True, no_ajax_socket_load=True)
+def index():
+	return render_template('index.html')
+
+@app.route('/<path:path>')
+def static_files(path):
+	return app.send_static_file(path)
+
+#######################################################
+
+...
 
 #######################################################
 
 if __name__ == "__main__":
+	# if you want to use socketio
 	socketio.run(app, port=5000, debug=True)
+	# if you just want to use AJAX
+	app.run(debug=True)
 ```
 
 > note, this is almost identical to that of the `app.py` file
@@ -61,6 +74,8 @@ def hello(name):
 ```
 
 *But declaring the variable type doesn't.*
+
+***BREAKS THINGS***
 ```python
 @app.route('/hello/<int:name>') # nope --> `int:`
 def hello(name):
@@ -132,7 +147,7 @@ Just reference all **internal** links with **`##`** before. This way, js can cap
 
 You can decide whether or not you want to omit the leading `/` from your `href` attributes, singleview_flask takes it into account either way.
 
-##### Examples
+##### examples
 
 - `##hello` &rarr; `example.com/hello`
 
@@ -140,5 +155,73 @@ You can decide whether or not you want to omit the leading `/` from your `href` 
 
 - `##hello/name` &rarr; `example.com/hello/name`
 
-#### Why lead with `##`?
+#### why lead with `##`?
 Good question, it's still fairly standard when it comes to a URL, meaning that it isn't going to chuck a tantrum if the js doesn't load properly, it may not work, but it won't scream at you.
+
+## what else do I need to do to get this sucker working?
+not much actually, if you've set everything up properly.
+
+Just note, that I've tried to make this as ***seamless*** as possible. Which means that there definitely are a few quirks.
+
+#### quirk 1
+one of these quirks is the fact that it tries to load the necessary scripts for you automagically.
+
+These scripts being
+- `jquery.min.js`; you know what this does. if you don't, google it.
+
+- `singleview_ajax.min.js`; a custom script for ajax page loading
+
+- `singleview_socketio.min.js`; a custom script for socketio page loading.
+
+	Note this script also includes the minified source of `socketio.min.js`, so it's not necessary to include it as well.
+
+Due to flask doing awesome things with URL's, it doesn't automatically pick up on the fact that you might be after a file. To achieve this, you **must** include the following as a route.
+
+```python
+@app.route('/<path:path>')
+def static_files(path):
+	return app.send_static_file(path)
+```
+
+Then, just dump the files into a folder named `static` in the root dir of your project. If you aren't sure on how this should look, check out the github code for this repo as a reference.
+
+#### quirk 2
+##### double render
+Double render, think of it like `render_template()` inception, because thats exactly what it is.
+
+> `render_template(render_template())` &larr; general gist of it
+
+to prevent this (it shouldn't occur, unless you're doing weird shit. Let me know if you are though, I'd be interested in hearing about it)
+
+add `route_exclude=True` as a param of the `@app.route()` decorator.
+
+```python
+@app.route('/func', route_exclude=True)
+def func():
+	return render_template('template.html')
+```
+
+#### quirk 3
+If you are choosing to go the AJAX route (pun intended), then you really, really, really, don't want to route **anything** to the route `/page`. This is due to the fact that flask_singleview is using it to send pages to the client.
+
+## weird things you may or may not find handy
+this won't allow for preloading, it will still allow the user to access it directly, it just won't show anything but the standard `index.html` page.
+```python
+@app.route('/func', no_preload=True)
+def func():
+	return render_template('template.html')
+```
+
+Basically the same thing as above, but opposite, only shows content if accessed directly, not through AJAX or socketio (clicked an internal link).
+```python
+@app.route('/func', no_ajax_socket_load=True)
+def func():
+	return render_template('template.html')
+```
+
+Now this one is a tad odd, and useful if you just want to return the function as normal. This prevents double render, a quirk.
+```python
+@app.route('/func', route_exclude=True)
+def func():
+	return render_template('template.html')
+```
