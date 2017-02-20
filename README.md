@@ -5,7 +5,7 @@ based on [flask-socketio](https://flask-socketio.readthedocs.io/en/latest/) or A
 
 [check out the docs](https://harryparkdotio.github.io/flask-singleview/)
 
-[check flask_singleview on pip](https://pypi.python.org/pypi?name=flask_singleview&version=0.1&:action=display)
+[check flask_singleview on pip](https://pypi.python.org/pypi/flask_singleview/)
 
 ## installation
 `pip install flask_singleview`
