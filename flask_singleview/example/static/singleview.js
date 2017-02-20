@@ -53,6 +53,7 @@ function currentPath() {
 function changePage(path, backforth=false) {
 	if ((currentPath() === path && backforth === true) || currentPath() !== path) {
 		$('#singleview-content').hide();
+		$("#singleview-loader").addClass('spin');
 		if (method === 'socketio') {
 			emitPage(path);
 		} else if (method === 'ajax') {
