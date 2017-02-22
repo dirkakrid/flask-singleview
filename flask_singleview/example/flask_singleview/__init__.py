@@ -11,7 +11,7 @@ class singleview:
 		self.base_template = base_template
 
 		self.routes = []
-		
+
 		if method == None:
 			self.method = 'ajax'
 			@app.route('/page', route_exclude=True, methods=['POST'])
