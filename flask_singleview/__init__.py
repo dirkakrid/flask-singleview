@@ -1,4 +1,6 @@
-from flask import render_template, jsonify, request, url_for
+# v0.1.5
+
+from flask import render_template, request, url_for
 from functools import wraps
 import re, base64
 
@@ -11,7 +13,7 @@ class singleview:
 		self.base_template = base_template
 
 		self.routes = []
-		
+
 		if method == None:
 			self.method = 'ajax'
 			@app.route('/page', route_exclude=True, methods=['POST'])

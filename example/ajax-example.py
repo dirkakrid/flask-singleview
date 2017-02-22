@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 from flask import Flask, render_template, redirect, url_for, request, session, send_from_directory, jsonify
-from flask_socketio import SocketIO
 import requests, json, base64, sys
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -9,13 +8,9 @@ from flask_singleview import singleview
 
 # flask setup
 app = Flask(__name__)
-app.threaded = True
-app.debug = True
 app.secret_key = 'secret'
 
-socketio = SocketIO(app)
-
-singleview = singleview(app, socketio)
+singleview = singleview(app)
 
 # routes
 #######################################################
@@ -24,7 +19,7 @@ singleview = singleview(app, socketio)
 def index():
 	return render_template('index.html')
 
-@app.route('/<path:path>')
+@app.route('/<path:path>', route_exclude=True)
 def static_files(path):
 	return app.send_static_file(path)
 
@@ -61,4 +56,4 @@ def err_500(e):
 #######################################################
 
 if __name__ == "__main__":
-	socketio.run(app, port=5000, debug=True)
+	app.run(port=5000, debug=True, threaded=True)
