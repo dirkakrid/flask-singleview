@@ -1,4 +1,4 @@
-# v0.1.5
+# v0.2
 
 from flask import render_template, request, url_for
 from functools import wraps
@@ -34,7 +34,7 @@ class singleview:
 	@staticmethod
 	def build_route_pattern(route):
 		# gets the name of the variable (surrounded by `< * >`)
-		route_regex = re.sub(r'(<\w+>)', r'(?P\1.+)', route)
+		route_regex = re.sub(r'(<\w+?>)', r'(?P\1.*?)(?=/)', route)
 		# compiles it into a glorious regex
 		return re.compile("^{}$".format(route_regex))
 
@@ -54,8 +54,8 @@ class singleview:
 						return ''
 					else:
 						return f(*args, **kwargs)
-
-			self.routes.append((self.build_route_pattern(rule), decorated_function))
+			if not route_exclude:
+				self.routes.append((self.build_route_pattern(rule), decorated_function))
 			# this is exactly how the `@app.route()` decorator does its thing
 			self.app.add_url_rule(rule, decorated_function.__name__, decorated_function, **options)
 

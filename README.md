@@ -1,4 +1,7 @@
 # flask-singleview
+
+latest: v0.2
+
 A flask micro extension for building *single-view* web apps.
 
 Uses AJAX or socketio.
