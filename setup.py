@@ -4,7 +4,7 @@ setup(
 	name = 'flask_singleview',
 	packages = ['flask_singleview'],
 	license='MIT',
-	version = '0.2',
+	version = '0.2.1',
 	description = 'A flask micro extension for building single-view web apps.',
 	author = 'harryparkdotio',
 	author_email = 'harry@harrypark.io',
