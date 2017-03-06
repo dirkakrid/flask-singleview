@@ -18,7 +18,7 @@ function load_link_triggers() {
 var socket_page = io.connect(window.location.protocol + "//" + window.location.host + '/page', {'force new connection': true});
 
 socket_page.on('page', function(data) {
-	$('#singleview-content').html(atob(data)).show();
+	$('#singleview-content').html(decodeURIComponent(escape(atob(data)))).show();
 	$('a[href^="##"]').unbind('click');
 	load_link_triggers();
 });

@@ -30,7 +30,7 @@ function changePage(path, backforth) {
 	if ((currentPath() === path && backforth === true) || currentPath() !== path) {
 		$('#singleview-content').hide();
 		$.post(window.location.protocol + "//" + window.location.host + '/page', {page: path}).done(function(data) {
-			$('#singleview-content').html(atob(data)).show();
+			$('#singleview-content').html(decodeURIComponent(escape(atob(data)))).show();
 			$('a[href^="##"]').unbind('click');
 			load_link_triggers();
 		});
