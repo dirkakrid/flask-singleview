@@ -34,7 +34,7 @@ class singleview:
 	@staticmethod
 	def build_route_pattern(route):
 		# gets the name of the variable (surrounded by `< * >`)
-		route_regex = re.sub(r'(<\w+?>)', r'(?P\1.*?)(?=/)', route)
+		route_regex = re.sub(r'(<\w+?>)', r'(?P\1.*?)(?=\/?)', route)
 		# compiles it into a glorious regex
 		return re.compile("^{}$".format(route_regex))
 
