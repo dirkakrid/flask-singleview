@@ -8,7 +8,7 @@ Uses AJAX or socketio.
 
 [check out the docs](http://flask-singleview.readthedocs.io/en/latest/)
 
-[check out the demo (ajax)](https://flask-singleview.harrypark.io/)
+[check out the demo (ajax)](https://singleview.harrypark.io/)
 
 ## installation
 `pip install flask_singleview`
