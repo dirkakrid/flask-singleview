@@ -35,7 +35,7 @@ def route_2():
 	values = {"data": "this is page 2<br><a href='##3/pipskweak'>page 3</a>"}
 	return render_template('default.html', **values)
 
-@app.route('/3/<name>')
+@app.route('/3/<int:name>')
 def route_3(name=None):
 	values = {"data": "this is page 3<br><a href='##1'>page 1</a> {}".format(name)}
 	return render_template('default.html', **values)
@@ -56,4 +56,4 @@ def err_500(e):
 #######################################################
 
 if __name__ == "__main__":
-	app.run(port=5000, debug=True, threaded=True)
+	app.run(port=5000, debug=True)
