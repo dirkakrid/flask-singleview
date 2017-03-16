@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 from flask import Flask, render_template, redirect, url_for, request, session, send_from_directory, jsonify
 import requests, json, base64, sys
-reload(sys)
-sys.setdefaultencoding('utf-8')
 
 from flask_singleview import singleview
 
@@ -35,7 +33,7 @@ def route_2():
 	values = {"data": "this is page 2<br><a href='##3/pipskweak'>page 3</a>"}
 	return render_template('default.html', **values)
 
-@app.route('/3/<int:name>')
+@app.route('/3/<name>')
 def route_3(name=None):
 	values = {"data": "this is page 3<br><a href='##1'>page 1</a> {}".format(name)}
 	return render_template('default.html', **values)

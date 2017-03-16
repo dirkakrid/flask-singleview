@@ -34,9 +34,7 @@ class singleview:
 	@staticmethod
 	def build_route_pattern(route):
 		# gets the name of the variable (surrounded by `< * >`)
-		route_regex = re.sub(r'<(?:\w\:)?(\w+?)>', r'(?P\1.*?)(?=\/?)', route)
-		m = re.compile("^{}$".format(route_regex)).match('int:name')
-		print m
+		route_regex = re.sub(r'(<\w+?>)', r'(?P\1.*?)(?=\/?)', route)
 		# compiles it into a glorious regex
 		return re.compile("^{}$".format(route_regex))
 
@@ -69,7 +67,6 @@ class singleview:
 		for route_pattern, view_function in self.routes:
 			m = route_pattern.match(path)
 			if m:
-				print m.groupdict()
 				return m.groupdict(), view_function
 		return None
 
@@ -82,9 +79,9 @@ class singleview:
 			kwargs, view_function = route_match
 			if self.method == 'socketio':
 				# socketio emits the page, base64 is used to minimize the possibility of an error occuring due to unicode
-				self.socketio.emit('page', base64.b64encode(view_function(ajax_socket_call=True, **kwargs)), namespace='/page')
+				self.socketio.emit('page', base64.b64encode(view_function(ajax_socket_call=True, **kwargs)).encode(), namespace='/page')
 			elif self.method == 'ajax':
 				# returns a base64 encoding of the page, base64 is used to minimize the possibility of an error occuring due to unicode
-				return base64.b64encode(view_function(ajax_socket_call=True, **kwargs))
+				return base64.b64encode(view_function(ajax_socket_call=True, **kwargs).encode())
 		else:
 			return 404

@@ -79,9 +79,9 @@ class singleview:
 			kwargs, view_function = route_match
 			if self.method == 'socketio':
 				# socketio emits the page, base64 is used to minimize the possibility of an error occuring due to unicode
-				self.socketio.emit('page', base64.b64encode(view_function(ajax_socket_call=True, **kwargs)), namespace='/page')
+				self.socketio.emit('page', base64.b64encode(view_function(ajax_socket_call=True, **kwargs).encode()), namespace='/page')
 			elif self.method == 'ajax':
 				# returns a base64 encoding of the page, base64 is used to minimize the possibility of an error occuring due to unicode
-				return base64.b64encode(view_function(ajax_socket_call=True, **kwargs))
+				return base64.b64encode(view_function(ajax_socket_call=True, **kwargs).encode())
 		else:
 			return 404
